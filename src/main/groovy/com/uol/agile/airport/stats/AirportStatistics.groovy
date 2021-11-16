@@ -20,12 +20,13 @@ def delayStats = {
 	}
 
 	// create connection 
-	def mongoClient = MongoClients.create("mongodb+srv://${properties.USN}:${properties.PWD}@airportstatisticscluste.6wwm2.mongodb.net/${properties.DB}?retryWrites=true&w=majority");
+	def mongoClient = MongoClients.create("mongodb+srv://${properties.USN}:"+
+"${properties.PWD}@airportstatisticscluste.6wwm2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 	def db = mongoClient.getDatabase(properties.DB);
 	def col = db.getCollection("travel-airport-stats")
 
 	//Filtering using Match Aggregation
-	def filter = Aggregates.match(Filters.eq("Time.Year", 2010));
+	def filter = Aggregates.match(Filters.lte("Time.Year", 2016));
 	//Define Projection using Project Aggregation
 	def projection = Aggregates.project(
 			Projections.fields(
@@ -53,7 +54,7 @@ def delayStats = {
 	//Define order by clause using Sort Aggregation
 	def sort = Aggregates.sort(Sorts.descending("TotalDelayed"));
 	def startTime = System.currentTimeMillis();
-	def resultList =col.aggregate(
+	def resultList = col.aggregate(
 			Arrays.asList(
 			filter,
 			projection,
@@ -62,8 +63,8 @@ def delayStats = {
 			)).forEach({println it})
 			
 			
-println("Total Execution Time : " + (System.currentTimeMillis() - startTime));
-			
+println("Total Execution Time in Milliseconds: " + (System.currentTimeMillis() - startTime));
+		
 }
-
+//Provide the flight delay statistics for the given Years
 delayStats()

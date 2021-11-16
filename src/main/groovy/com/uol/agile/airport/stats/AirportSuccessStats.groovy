@@ -9,7 +9,7 @@ import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Projections
 import com.mongodb.client.model.Sorts
-
+//Exercise 5
 
 def successStats = { 
 	
@@ -39,9 +39,7 @@ def successStats = {
 	//Define group by clause using the Group Aggregation & Accumulator using Sum keyword
 	def group = Aggregates.group( Arrays.asList('$'+"Airport.Name"),
 			Accumulators.sum("CountOfOntime",'$'+"Statistics.Flights.OnTime"),
-			Accumulators.sum("CountOfOnCancelled",'$'+"Statistics.Flights.Cancelled"),
-			Accumulators.avg("CountOfOnCancelled",'$'+"Statistics.Flights.onTime",'$'+"Statistics.Flights.Total")
-			);
+			Accumulators.sum("CountOfOnCancelled",'$'+"Statistics.Flights.Cancelled"));
 	//Define order by clause using Sort Aggregation
 	def sort = Aggregates.sort(Sorts.descending("CountOfOntime"));
 	def startTime = System.currentTimeMillis();
